@@ -23,7 +23,7 @@ class WCAGChecker:
         return self.evaluate_results(results)
 
     def evaluate_results(self, results):
-        # For WCAG 2.4.2, all checks must pass
+        # For WCAG criteria, all checks must pass
         overall_result = all(result for result in results.values() if result is not None)
         return {
             'overall': overall_result,

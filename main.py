@@ -2,6 +2,8 @@ import sys
 from wcag_checker.wcag_2_4_2 import WCAG2_4_2Checker
 from wcag_checker.wcag_3_1_1 import WCAG3_1_1Checker
 from wcag_checker.wcag_3_1_2 import WCAG3_1_2Checker
+from wcag_checker.wcag_1_1_1 import WCAG1_1_1Checker
+from wcag_checker.wcag_1_3_1 import WCAG1_3_1Checker
 
 def main():
     if len(sys.argv) < 2:
@@ -43,5 +45,27 @@ def main():
     for check, result in results_3_1_2.items():
         print(f"- {check}: {'Pass' if result else 'Fail'}")
 
+    # WCAG 1.1.1 チェック
+    checker_1_1_1 = WCAG1_1_1Checker(url)
+    checker_1_1_1.run_checks()
+    overall_pass_1_1_1, results_1_1_1 = checker_1_1_1.evaluate()
+
+    print(f"\nWCAG 1.1.1 Check Result for {url}:")
+    print(f"Overall: {'Pass' if overall_pass_1_1_1 else 'Fail'}\n")
+    print("Detailed Results:")
+    for check, result in results_1_1_1.items():
+        print(f"- {check}: {'Pass' if result else 'Fail'}")
+
+    # WCAG 1.3.1 チェック
+    checker_1_3_1 = WCAG1_3_1Checker(url)
+    checker_1_3_1.run_checks()
+    overall_pass_1_3_1, results_1_3_1 = checker_1_3_1.evaluate()
+
+    print(f"\nWCAG 1.3.1 Check Result for {url}:")
+    print(f"Overall: {'Pass' if overall_pass_1_3_1 else 'Fail'}\n")
+    print("Detailed Results:")
+    for check, result in results_1_3_1.items():
+        print(f"- {check}: {'Pass' if result else 'Fail'}")
+        
 if __name__ == "__main__":
     main()

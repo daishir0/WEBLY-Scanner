@@ -4,6 +4,18 @@ from wcag_checker.wcag_3_1_1 import WCAG3_1_1Checker
 from wcag_checker.wcag_3_1_2 import WCAG3_1_2Checker
 from wcag_checker.wcag_1_1_1 import WCAG1_1_1Checker
 from wcag_checker.wcag_1_3_1 import WCAG1_3_1Checker
+from wcag_checker.wcag_2_2_2 import WCAG2_2_2Checker
+
+def run_wcag_check(checker_class, url, criterion):
+    checker = checker_class(url)
+    checker.run_checks()
+    overall_pass, results = checker.evaluate()
+
+    print(f"\nWCAG {criterion} Check Result for {url}:")
+    print(f"Overall: {'Pass' if overall_pass else 'Fail'}\n")
+    print("Detailed Results:")
+    for check, result in results.items():
+        print(f"- {check}: {'Pass' if result else 'Fail'}")
 
 def main():
     if len(sys.argv) < 2:
@@ -11,61 +23,17 @@ def main():
         return
 
     url = sys.argv[1]
-    
-    # WCAG 2.4.2 チェック
-    checker_2_4_2 = WCAG2_4_2Checker(url)
-    checker_2_4_2.run_checks()
-    overall_pass_2_4_2, results_2_4_2 = checker_2_4_2.evaluate()
+    wcag_checks = [
+        (WCAG2_4_2Checker, "2.4.2"),
+        (WCAG3_1_1Checker, "3.1.1"),
+        (WCAG3_1_2Checker, "3.1.2"),
+        (WCAG1_1_1Checker, "1.1.1"),
+        (WCAG1_3_1Checker, "1.3.1"),
+        (WCAG2_2_2Checker, "2.2.2")
+    ]
 
-    print(f"WCAG 2.4.2 Check Result for {url}:")
-    print(f"Overall: {'Pass' if overall_pass_2_4_2 else 'Fail'}\n")
-    print("Detailed Results:")
-    for check, result in results_2_4_2.items():
-        print(f"- {check}: {'Pass' if result else 'Fail'}")
-    
-    # WCAG 3.1.1 チェック
-    checker_3_1_1 = WCAG3_1_1Checker(url)
-    checker_3_1_1.run_checks()
-    overall_pass_3_1_1, results_3_1_1 = checker_3_1_1.evaluate()
+    for checker_class, criterion in wcag_checks:
+        run_wcag_check(checker_class, url, criterion)
 
-    print(f"\nWCAG 3.1.1 Check Result for {url}:")
-    print(f"Overall: {'Pass' if overall_pass_3_1_1 else 'Fail'}\n")
-    print("Detailed Results:")
-    for check, result in results_3_1_1.items():
-        print(f"- {check}: {'Pass' if result else 'Fail'}")
-    
-    # WCAG 3.1.2 チェック
-    checker_3_1_2 = WCAG3_1_2Checker(url)
-    checker_3_1_2.run_checks()
-    overall_pass_3_1_2, results_3_1_2 = checker_3_1_2.evaluate()
-
-    print(f"\nWCAG 3.1.2 Check Result for {url}:")
-    print(f"Overall: {'Pass' if overall_pass_3_1_2 else 'Fail'}\n")
-    print("Detailed Results:")
-    for check, result in results_3_1_2.items():
-        print(f"- {check}: {'Pass' if result else 'Fail'}")
-
-    # WCAG 1.1.1 チェック
-    checker_1_1_1 = WCAG1_1_1Checker(url)
-    checker_1_1_1.run_checks()
-    overall_pass_1_1_1, results_1_1_1 = checker_1_1_1.evaluate()
-
-    print(f"\nWCAG 1.1.1 Check Result for {url}:")
-    print(f"Overall: {'Pass' if overall_pass_1_1_1 else 'Fail'}\n")
-    print("Detailed Results:")
-    for check, result in results_1_1_1.items():
-        print(f"- {check}: {'Pass' if result else 'Fail'}")
-
-    # WCAG 1.3.1 チェック
-    checker_1_3_1 = WCAG1_3_1Checker(url)
-    checker_1_3_1.run_checks()
-    overall_pass_1_3_1, results_1_3_1 = checker_1_3_1.evaluate()
-
-    print(f"\nWCAG 1.3.1 Check Result for {url}:")
-    print(f"Overall: {'Pass' if overall_pass_1_3_1 else 'Fail'}\n")
-    print("Detailed Results:")
-    for check, result in results_1_3_1.items():
-        print(f"- {check}: {'Pass' if result else 'Fail'}")
-        
 if __name__ == "__main__":
     main()

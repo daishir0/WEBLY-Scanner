@@ -1,10 +1,27 @@
 import sys
-from wcag_checker.wcag_2_4_2 import WCAG2_4_2Checker
-from wcag_checker.wcag_3_1_1 import WCAG3_1_1Checker
-from wcag_checker.wcag_3_1_2 import WCAG3_1_2Checker
-from wcag_checker.wcag_1_1_1 import WCAG1_1_1Checker
-from wcag_checker.wcag_1_3_1 import WCAG1_3_1Checker
-from wcag_checker.wcag_2_2_2 import WCAG2_2_2Checker
+import importlib
+import pkgutil
+
+def import_checkers():
+    checkers = {}
+    package = importlib.import_module('wcag_checker')
+    # print("Searching for checker modules...")
+    for _, module_name, _ in pkgutil.iter_modules(package.__path__):
+        if module_name.startswith('wcag_'):
+            try:
+                module = importlib.import_module(f'wcag_checker.{module_name}')
+                class_name = f"WCAG{module_name.split('_', 1)[1].upper().replace('_', '_')}Checker"
+                # print(f"Looking for class: {class_name}")  # デバッグ出力
+                if hasattr(module, class_name):
+                    checker_class = getattr(module, class_name)
+                    criterion = module_name.split('_', 1)[1].replace('_', '.')
+                    checkers[criterion] = checker_class
+                    # print(f"Added checker: {criterion}")
+                else:
+                    print(f"Class {class_name} not found in {module_name}")
+            except Exception as e:
+                print(f"Error processing {module_name}: {e}")
+    return checkers
 
 def run_wcag_check(checker_class, url, criterion):
     checker = checker_class(url)
@@ -23,16 +40,11 @@ def main():
         return
 
     url = sys.argv[1]
-    wcag_checks = [
-        (WCAG2_4_2Checker, "2.4.2"),
-        (WCAG3_1_1Checker, "3.1.1"),
-        (WCAG3_1_2Checker, "3.1.2"),
-        (WCAG1_1_1Checker, "1.1.1"),
-        (WCAG1_3_1Checker, "1.3.1"),
-        (WCAG2_2_2Checker, "2.2.2")
-    ]
+    # print(f"Checking URL: {url}")  # デバッグ出力
+    wcag_checks = import_checkers()
+    # print(f"Found {len(wcag_checks)} checkers")  # デバッグ出力
 
-    for checker_class, criterion in wcag_checks:
+    for criterion, checker_class in wcag_checks.items():
         run_wcag_check(checker_class, url, criterion)
 
 if __name__ == "__main__":

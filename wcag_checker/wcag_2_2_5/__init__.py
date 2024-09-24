@@ -3,7 +3,7 @@ from .check_reauthentication_mechanism import check as check_reauthentication_me
 from .check_data_preservation import check as check_data_preservation
 from .check_data_restoration import check as check_data_restoration
 
-class WCAG2_2_5Checker:
+class WCAG2_2_5Checker:  # クラス名を修正
     def __init__(self, url):
         self.url = url
         self.results = {

@@ -5,18 +5,15 @@ import pkgutil
 def import_checkers():
     checkers = {}
     package = importlib.import_module('wcag_checker')
-    # print("Searching for checker modules...")
     for _, module_name, _ in pkgutil.iter_modules(package.__path__):
         if module_name.startswith('wcag_'):
             try:
                 module = importlib.import_module(f'wcag_checker.{module_name}')
                 class_name = f"WCAG{module_name.split('_', 1)[1].upper().replace('_', '_')}Checker"
-                # print(f"Looking for class: {class_name}")  # デバッグ出力
                 if hasattr(module, class_name):
                     checker_class = getattr(module, class_name)
                     criterion = module_name.split('_', 1)[1].replace('_', '.')
                     checkers[criterion] = checker_class
-                    # print(f"Added checker: {criterion}")
                 else:
                     print(f"Class {class_name} not found in {module_name}")
             except Exception as e:
@@ -34,18 +31,21 @@ def run_wcag_check(checker_class, url, criterion):
     for check, result in results.items():
         print(f"- {check}: {'Pass' if result else 'Fail'}")
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <url>")
-        return
-
-    url = sys.argv[1]
-    # print(f"Checking URL: {url}")  # デバッグ出力
-    wcag_checks = import_checkers()
-    # print(f"Found {len(wcag_checks)} checkers")  # デバッグ出力
-
-    for criterion, checker_class in wcag_checks.items():
-        run_wcag_check(checker_class, url, criterion)
+def main(url, criterion=None):
+    checkers = import_checkers()
+    if criterion:
+        if criterion in checkers:
+            run_wcag_check(checkers[criterion], url, criterion)
+        else:
+            print(f"Checker for criterion {criterion} not found.")
+    else:
+        for criterion, checker_class in checkers.items():
+            run_wcag_check(checker_class, url, criterion)
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) not in [2, 3]:
+        print("Usage: python main.py <url> [<criterion>]")
+    else:
+        url = sys.argv[1]
+        criterion = sys.argv[2] if len(sys.argv) == 3 else None
+        main(url, criterion)

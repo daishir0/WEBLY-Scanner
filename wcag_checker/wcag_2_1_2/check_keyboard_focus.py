@@ -1,22 +1,36 @@
-from wcag_checker.utils import fetch_url, parse_html
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from wcag_checker.utils import get_webdriver
 
 def check(url):
-    driver = webdriver.Chrome()
-    driver.get(url)
-    
+    driver = get_webdriver()
     try:
-        # ページ内の全てのフォーカス可能な要素を取得
-        focusable_elements = driver.find_elements(By.CSS_SELECTOR, 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        driver.get(url)
         
-        # 各要素にキーボードでフォーカスを当てる
-        for element in focusable_elements:
+        # すべての対話可能な要素を取得
+        interactive_elements = driver.find_elements(By.CSS_SELECTOR, 'a, button, input, select, textarea')
+        
+        for element in interactive_elements:
+            # 要素にフォーカスを当てる
             element.send_keys(Keys.TAB)
-            if element == driver.switch_to.active_element:
+            
+            # フォーカスが当たっているか確認
+            focused_element = driver.switch_to.active_element
+            if focused_element != element:
+                return False
+            
+            # エンターキーを押して操作を試みる
+            focused_element.send_keys(Keys.ENTER)
+            
+            # 何らかの変化（ページ遷移やポップアップなど）が起きたか確認
+            try:
+                WebDriverWait(driver, 3).until(EC.staleness_of(element))
                 return True
+            except:
+                pass
         
-        return False
+        return True
     finally:
         driver.quit()

@@ -17,6 +17,10 @@ def check_ui_components(url):
         # コントラスト比を計算
         contrast_ratio = calculate_contrast_ratio(bg_color, fg_color)
         
+        if contrast_ratio is None:
+            print(f"Warning: Contrast ratio is None for component {component}. Skipping this component.")
+            continue
+        
         if contrast_ratio < 3:
             return False
     

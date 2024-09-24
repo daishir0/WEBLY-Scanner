@@ -1,4 +1,5 @@
 from wcag_checker.utils import fetch_url, parse_html
+import re  # ここにreモジュールのインポートを追加
 
 def check(url):
     html_content = fetch_url(url)

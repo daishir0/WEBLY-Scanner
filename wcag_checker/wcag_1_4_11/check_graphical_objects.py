@@ -7,7 +7,7 @@ def check_graphical_objects(url):
         return False
     
     soup = parse_html(html_content)
-    graphical_objects = soup.find_all(['img', 'svg'])
+    graphical_objects = soup.find_all(['img', 'svg', 'canvas'])
     
     for obj in graphical_objects:
         # グラフィカルオブジェクトの背景色と前景色を取得
@@ -16,6 +16,10 @@ def check_graphical_objects(url):
         
         # コントラスト比を計算
         contrast_ratio = calculate_contrast_ratio(bg_color, fg_color)
+        
+        if contrast_ratio is None:
+            print(f"Warning: Contrast ratio is None for graphical object {obj}. Skipping this object.")
+            continue
         
         if contrast_ratio < 3:
             return False

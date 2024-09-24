@@ -2,11 +2,16 @@ from wcag_checker.utils import fetch_url, parse_html
 import nltk
 from nltk.corpus import wordnet
 
-nltk.download('wordnet', quiet=True)
+# 必要な場合にのみダウンロード
+try:
+    wordnet.ensure_loaded()
+except LookupError:
+    nltk.download('wordnet', quiet=True)
 
 def check(url):
     html_content = fetch_url(url)
     if html_content is None:
+        print("Error: Unable to fetch URL content.")
         return False
     
     soup = parse_html(html_content)

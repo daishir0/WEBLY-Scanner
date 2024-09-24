@@ -4,6 +4,8 @@ from .check_size_dependency import check as check_size_dependency
 from .check_visual_location_dependency import check as check_visual_location_dependency
 from .check_orientation_dependency import check as check_orientation_dependency
 from .check_sound_dependency import check as check_sound_dependency
+from .check_textual_identification import check as check_textual_identification
+from .check_sensory_characteristics import check_sensory_characteristics
 
 class WCAG1_3_3Checker:
     def __init__(self, url):
@@ -14,7 +16,9 @@ class WCAG1_3_3Checker:
             'check_size_dependency': False,
             'check_visual_location_dependency': False,
             'check_orientation_dependency': False,
-            'check_sound_dependency': False
+            'check_sound_dependency': False,
+            'check_textual_identification': False,
+            'check_sensory_characteristics': False
         }
 
     def run_checks(self):
@@ -24,6 +28,8 @@ class WCAG1_3_3Checker:
         self.results['check_visual_location_dependency'] = check_visual_location_dependency(self.url)
         self.results['check_orientation_dependency'] = check_orientation_dependency(self.url)
         self.results['check_sound_dependency'] = check_sound_dependency(self.url)
+        self.results['check_textual_identification'] = check_textual_identification(self.url)
+        self.results['check_sensory_characteristics'] = check_sensory_characteristics(self.url)
 
     def evaluate(self):
         overall_pass = all(self.results.values())

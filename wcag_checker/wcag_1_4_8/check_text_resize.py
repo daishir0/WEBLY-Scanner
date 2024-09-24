@@ -9,9 +9,7 @@ def check(url):
     
     # テキストのリサイズ可能性を確認
     style_tags = soup.find_all('style')
-    for style in style_tag
-
-s:
+    for style in style_tags:
         if 'font-size' in style.string and 'px' in style.string:
             print("Warning: Fixed font sizes detected. This may interfere with text resizing.")
     

@@ -1,9 +1,9 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from wcag_checker.utils import get_webdriver
 
 def check(url):
-    driver = webdriver.Chrome()
+    driver = get_webdriver()
     try:
         driver.get(url)
         elements = driver.find_elements(By.XPATH, "//*")

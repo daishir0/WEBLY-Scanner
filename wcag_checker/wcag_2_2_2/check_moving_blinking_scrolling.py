@@ -5,23 +5,10 @@ import time
 import cv2
 import numpy as np
 import os
+from wcag_checker.utils import get_webdriver
 
 def capture_screenshots(url, num_screenshots, interval):
-    options = Options()
-    options.headless = True
-    options.binary_location = "/usr/bin/google-chrome"
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--enable-logging')
-    options.add_argument('--log-level=1')
-    options.add_argument("--headless")
-
-    service = Service(executable_path="/usr/bin/chromedriver")
-
-    driver = webdriver.Chrome(service=service, options=options)
-    driver.set_window_size(1920, 2160)
-
+    driver = get_webdriver()
     driver.get(url)
     time.sleep(5)
 

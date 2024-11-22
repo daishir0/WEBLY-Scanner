@@ -5,11 +5,13 @@ import pkgutil
 def import_checkers():
     checkers = {}
     package = importlib.import_module('wcag_checker')
+    
     for _, module_name, _ in pkgutil.iter_modules(package.__path__):
-        if module_name.startswith('wcag_'):
+        if module_name.startswith('wcag_') and '_' in module_name[5:]:
             try:
                 module = importlib.import_module(f'wcag_checker.{module_name}')
                 class_name = f"WCAG{module_name.split('_', 1)[1].upper().replace('_', '_')}Checker"
+                
                 if hasattr(module, class_name):
                     checker_class = getattr(module, class_name)
                     criterion = module_name.split('_', 1)[1].replace('_', '.')
@@ -17,7 +19,8 @@ def import_checkers():
                 else:
                     print(f"Class {class_name} not found in {module_name}")
             except Exception as e:
-                print(f"Error processing {module_name}: {e}")
+                print(f"Error processing {module_name}: {str(e)}")  # デバッグ追加
+    
     return checkers
 
 def run_wcag_check(checker_class, url, criterion):

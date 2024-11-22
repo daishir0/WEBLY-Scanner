@@ -1,25 +1,23 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
 from wcag_checker.utils import get_webdriver
 
 def check(url):
     driver = get_webdriver()
     try:
         driver.get(url)
-        original_handles = driver.window_handles
-        elements = driver.find_elements(By.XPATH, "//*")
-        for element in elements:
+        
+        links = driver.find_elements(By.TAG_NAME, 'a')
+        
+        for i, link in enumerate(links):
             try:
-                WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable(element)
-                )
-                element.send_keys("\t")
-            except (TimeoutException, ElementNotInteractableException):
+                target = link.get_attribute('target')
+                if target and target == '_blank':
+                    return False
+            except Exception as e:
                 continue
-            if len(driver.window_handles) > len(original_handles):
-                return False
+        
         return True
+    except Exception as e:
+        return False
     finally:
         driver.quit()

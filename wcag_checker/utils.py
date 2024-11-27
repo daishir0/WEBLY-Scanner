@@ -3,10 +3,15 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
+
+# 警告を無視する
+warnings.simplefilter('ignore', InsecureRequestWarning)
 
 def fetch_url(url):
     try:
-        response = requests.get(url)
+        response = requests.get(url, verify=False)
         if response.status_code == 200:
             return response.text
         else:

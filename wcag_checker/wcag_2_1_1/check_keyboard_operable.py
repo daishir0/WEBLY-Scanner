@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from wcag_checker.utils import get_webdriver
+from selenium.common.exceptions import ElementNotInteractableException
 
 def check(url):
     driver = get_webdriver()
@@ -15,7 +16,11 @@ def check(url):
         
         for element in interactive_elements:
             # 要素にフォーカスを当てる
-            element.send_keys(Keys.TAB)
+            try:
+                element.send_keys(Keys.TAB)
+            except ElementNotInteractableException:
+                print(f"要素 {element} にフォーカスを当てることができませんでした。")
+                continue  # 次の要素に進む
             
             # フォーカスが当たっているか確認
             focused_element = driver.switch_to.active_element
@@ -23,7 +28,11 @@ def check(url):
                 return False
             
             # エンターキーを押して操作を試みる
-            focused_element.send_keys(Keys.ENTER)
+            try:
+                focused_element.send_keys(Keys.ENTER)
+            except ElementNotInteractableException:
+                print(f"要素 {focused_element} にエンターキーを送信できませんでした。")
+                continue  # 次の要素に進む
             
             # 何らかの変化（ページ遷移やポップアップなど）が起きたか確認
             try:

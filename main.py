@@ -43,6 +43,7 @@ def main(url, criterion=None):
             print(f"Checker for criterion {criterion} not found.")
     else:
         for criterion, checker_class in checkers.items():
+            print(f"\n************ Running WCAG check: {criterion} ************")
             run_wcag_check(checker_class, url, criterion)
 
 if __name__ == "__main__":

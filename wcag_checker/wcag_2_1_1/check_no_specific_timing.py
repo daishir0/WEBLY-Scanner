@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, ElementNotInteractableException
 from wcag_checker.utils import get_webdriver
 
 def check(url):
@@ -30,6 +30,9 @@ def check(url):
                 error_messages = driver.find_elements(By.CSS_SELECTOR, '.error-message')
                 if error_messages:
                     return False
+            except ElementNotInteractableException:
+                print(f"要素 {element} にインタラクションできませんでした。")
+                continue  # 次の要素に進む
             except StaleElementReferenceException:
                 # 要素がstaleになった場合、再取得して再試行
                 interactive_elements = driver.find_elements(By.CSS_SELECTOR, 'a, button, input, select, textarea')

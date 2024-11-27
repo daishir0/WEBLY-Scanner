@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException  # 追加
+from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
 
 def check(url):
     driver = get_webdriver()
@@ -20,7 +20,11 @@ def check(url):
         
         for element in hover_elements:
             # 要素にホバー
-            webdriver.ActionChains(driver).move_to_element(element).perform()
+            try:
+                webdriver.ActionChains(driver).move_to_element(element).perform()
+            except ElementNotInteractableException:
+                print(f"要素 {element} にホバーできませんでした。")
+                continue  # 次の要素に進む
             
             # 追加コンテンツが表示されるのを待つ
             try:
@@ -32,7 +36,11 @@ def check(url):
                 return False
             
             # ESCキーを押して追加コンテンツを閉じようとする
-            additional_content.send_keys(Keys.ESCAPE)
+            try:
+                additional_content.send_keys(Keys.ESCAPE)
+            except ElementNotInteractableException:
+                print("追加コンテンツがインタラクションできませんでした")
+                continue  # 次の要素に進む
             
             # 追加コンテンツが消えたかチェック
             try:

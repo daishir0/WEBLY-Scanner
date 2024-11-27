@@ -2,7 +2,7 @@ from wcag_checker.utils import get_webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException  # 追加
+from selenium.common.exceptions import TimeoutException, ElementNotInteractableException  # 追加
 from selenium.webdriver.common.action_chains import ActionChains  # 追加
 import time
 
@@ -20,7 +20,11 @@ def check(url):
         
         for element in hover_elements:
             # 要素にホバー
-            ActionChains(driver).move_to_element(element).perform()
+            try:
+                ActionChains(driver).move_to_element(element).perform()
+            except ElementNotInteractableException:
+                print(f"要素 {element} にホバーできませんでした。")
+                continue  # 次の要素に進む
             
             # 追加コンテンツが表示されるのを待つ
             try:

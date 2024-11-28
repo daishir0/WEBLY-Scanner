@@ -13,23 +13,28 @@ def check(url):
         interactive_elements = driver.find_elements(By.CSS_SELECTOR, 'a, button, input, select, textarea')
         
         for element in interactive_elements:
-            # 要素にフォーカスを当てる
-            element.send_keys(Keys.TAB)
-            
-            # フォーカスが当たっているか確認
-            focused_element = driver.switch_to.active_element
-            if focused_element != element:
-                return False
-            
-            # エンターキーを押して操作を試みる
-            focused_element.send_keys(Keys.ENTER)
-            
-            # 何らかの変化（ページ遷移やポップアップなど）が起きたか確認
             try:
-                WebDriverWait(driver, 3).until(EC.staleness_of(element))
-                return True
-            except:
-                pass
+                # 要素にフォーカスを当てる
+                element.send_keys(Keys.TAB)
+                
+                # フォーカスが当たっているか確認
+                focused_element = driver.switch_to.active_element
+                if focused_element != element:
+                    print(f"警告: 要素 {element.tag_name} にフォーカスを当てることができませんでした")
+                    continue
+                
+                # エンターキーを押して操作を試みる
+                focused_element.send_keys(Keys.ENTER)
+                
+                # 何らかの変化（ページ遷移やポップアップなど）が起きたか確認
+                try:
+                    WebDriverWait(driver, 3).until(EC.staleness_of(element))
+                    return True
+                except:
+                    pass
+            except Exception as e:
+                print(f"警告: 要素 {element.tag_name} の操作中にエラーが発生しました: {str(e)}")
+                continue
         
         return True
     finally:

@@ -1,18 +1,18 @@
-# WCAG Checker
+# WEBLY-Scanner
 
 ## Overview
-WCAG Checker is a Python tool designed to check web pages for compliance with Web Content Accessibility Guidelines (WCAG) 2.1 criteria. It aims to support various WCAG success criteria and can be expanded to include more checks in the future.
+WEBLY-Scanner is a Python tool designed to check web pages for compliance with Web Content Accessibility Guidelines (WCAG) 2.1 criteria. It aims to support various WCAG success criteria and can be expanded to include more checks in the future.
 
 ## Installation
-To install WCAG Checker, follow these steps:
+To install WEBLY-Scanner, follow these steps:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/daishir0/wcag_checker
+   git clone https://github.com/daishir0/webly-scanner
    ```
 2. Change to the project directory:
    ```
-   cd wcag_checker
+   cd webly-scanner
    ```
 3. Install the required dependencies:
    ```
@@ -20,15 +20,37 @@ To install WCAG Checker, follow these steps:
    ```
 
 ## Usage
-To use WCAG Checker, run the main.py script with a URL as an argument:
+WEBLY-Scanner can be used in two ways:
 
+### 1. Check all implemented WCAG criteria
 ```
 python main.py <url>
 ```
 
-Replace `<url>` with the web page URL you want to check.
+### 2. Check a specific WCAG criterion
+```
+python main.py <url> <criterion>
+```
 
-The tool will perform checks for the implemented WCAG criteria and display the results in the console.
+Examples:
+```
+# Check all criteria
+python main.py https://example.com
+
+# Check only WCAG 1.1.1
+python main.py https://example.com 1.1.1
+```
+
+The tool will perform the specified checks and display detailed results in the console, including:
+- Overall pass/fail status
+- Individual check results for each criterion
+- Specific details about any failures found
+
+## Features
+- Modular design allowing easy addition of new WCAG criteria checks
+- Ability to test specific WCAG criteria individually
+- Detailed reporting of test results
+- Automatic detection and loading of implemented checkers
 
 ## Notes
 - This tool performs automated checks for the implemented WCAG criteria. It may not cover all accessibility issues, and manual review is still necessary for comprehensive accessibility testing.
@@ -41,21 +63,21 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-# WCAG Checker
+# WEBLY-Scanner
 
 ## 概要
-WCAG Checkerは、Web Content Accessibility Guidelines (WCAG) 2.1基準に対するウェブページの準拠性をチェックするために設計されたPythonツールです。様々なWCAG達成基準をサポートすることを目指しており、将来的にはさらに多くのチェック項目を追加できるように設計されています。
+WEBLY-ScannerはWeb Content Accessibility Guidelines (WCAG) 2.1基準に対するウェブページの準拠性をチェックするために設計されたPythonツールです。様々なWCAG達成基準をサポートすることを目指しており、将来的にはさらに多くのチェック項目を追加できるように設計されています。
 
 ## インストール方法
-WCAG Checkerをインストールするには、以下の手順に従ってください：
+WEBLY-Scannerをインストールするには、以下の手順に従ってください：
 
 1. リポジトリをクローンします：
    ```
-   git clone https://github.com/daishir0/wcag_checker
+   git clone https://github.com/daishir0/webly-scanner
    ```
 2. プロジェクトディレクトリに移動します：
    ```
-   cd wcag_checker
+   cd webly-scanner
    ```
 3. 必要な依存関係をインストールします：
    ```
@@ -63,15 +85,37 @@ WCAG Checkerをインストールするには、以下の手順に従ってく�
    ```
 
 ## 使い方
-WCAG Checkerを使用するには、main.pyスクリプトをURLを引数として実行します：
+WEBLY-Scannerは2つの方法で使用できます：
 
+### 1. 実装されているすべてのWCAG基準をチェック
 ```
 python main.py <url>
 ```
 
-`<url>`をチェックしたいウェブページのURLに置き換えてください。
+### 2. 特定のWCAG達成基準のみをチェック
+```
+python main.py <url> <criterion>
+```
 
-ツールは実装されているWCAG基準に対するチェックを実行し、結果をコンソールに表示します。
+使用例：
+```
+# すべての基準をチェック
+python main.py https://example.com
+
+# WCAG 1.1.1のみをチェック
+python main.py https://example.com 1.1.1
+```
+
+ツールは指定されたチェックを実行し、以下を含む詳細な結果をコンソールに表示します：
+- 全体的な合否状態
+- 各基準における個別のチェック結果
+- 不合格項目の詳細情報
+
+## 特徴
+- 新しいWCAG基準チェックを容易に追加できるモジュラー設計
+- 特定のWCAG基準を個別にテスト可能
+- テスト結果の詳細なレポート
+- 実装されているチェッカーの自動検出と読み込み
 
 ## 注意点
 - このツールは実装されているWCAG基準に対する自動チェックを実行します。すべてのアクセシビリティの問題を検出できるわけではなく、包括的なアクセシビリティテストには手動でのレビューが依然として必要です。
